@@ -1,0 +1,14 @@
+{
+  "name": "ahackyplace",
+  "version": "1.0.0",
+  "description": "A hacky implementation of the r/place concept",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luctowers/ahackyplace.git"
+  },
+  "keywords": [
+    "r/place"
+  ],
+  "author": "Lucas Towers",
+  "license": "MIT"
+}
