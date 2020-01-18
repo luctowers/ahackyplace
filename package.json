@@ -2,6 +2,10 @@
   "name": "ahackyplace",
   "version": "1.0.0",
   "description": "A hacky implementation of the r/place concept",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/luctowers/ahackyplace.git"
@@ -10,5 +14,8 @@
     "r/place"
   ],
   "author": "Lucas Towers",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
