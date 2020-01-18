@@ -1,8 +1,6 @@
 const express = require("express");
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello ahackyplace!");
-});
+app.use(express.static("static"));
 
 module.exports = app;
