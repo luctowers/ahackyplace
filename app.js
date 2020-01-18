@@ -1,23 +1,14 @@
 const express = require("express");
-const redis = require("redis");
-const config = require("./config");
+const canvas = require("./lib/canvas");
 
-// REDIS
-
-const redisClient = redis.createClient({
-  host: config.redishost,
-  port: config.redisPort
+canvas.info().then((canvasInfo) => {
+  console.log("Detected canvas info " + JSON.stringify(canvasInfo));
 });
 
-redisClient.on("connect", () => {
-  console.log("Connection established to Redis server!");
-});
-
-redisClient.on("error", (error) => {
-  console.log("Redis error: " + error);
-});
-
-// EXPRESS
+// if the canvas's bitdepth is 4 this is will set the byte of the canvas to 'A'
+// 'A' = 0100 (4) 0001 (1)
+canvas.setPixel(0, 0, 4);
+canvas.setPixel(1, 0, 1);
 
 const app = express();
 
