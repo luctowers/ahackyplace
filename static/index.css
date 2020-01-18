@@ -1,3 +1,32 @@
 body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
   font-family: sans-serif;
+}
+
+#header {
+  height: 46px;
+  margin: 8px 0px 0px 0px;
+  font-size: 32px;
+  text-align: center;
+  border-bottom: 1px solid#ccc;
+}
+
+#content {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 54px;
+  bottom: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#canvas {
+  width: 512px;
+  height: 512px;
+  border: 1px solid black;
+  border-style: dotted;
 }
