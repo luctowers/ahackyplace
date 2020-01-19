@@ -1,9 +1,23 @@
 var colors = ["#ffffff", "#e4e4e4", "#888888", "#222222", "#ffa7d1", "#e50000", "#e59500", "#a06a42", "#e5d900", "#94e044", "#02be01", "#00d3dd", "#0083c7", "#0000ea", "#cf6ee4", "#820080"];
+var canvasMargin = 64;
 
 var canvas = document.getElementById("canvas");
 var container = document.getElementById("container");
 
 var canvasData = null;
+
+var websocket = new WebSocket("ws://" + window.location.host + "/");
+websocket.binaryType = "arraybuffer";
+websocket.onmessage = function(message) {
+  var bufferView32 = new Uint32Array(message.data);
+  var x = bufferView32[0];
+  var y = bufferView32[1];
+  var value = bufferView32[2];
+  if (canvasData) {
+    canvasData.pixels[x+y*canvasData.width] = value;
+    redrawPixel(x, y);
+  }
+};
 
 function onResize() {
   if (!canvasData)
@@ -12,11 +26,11 @@ function onResize() {
   var canvasAspectRatio = canvasData.width/canvasData.height;
 
   if (containerAspectRatio < canvasAspectRatio) {
-    canvas.width = container.offsetWidth - 64;
+    canvas.width = container.offsetWidth - canvasMargin;
     canvas.height = canvas.width/canvasAspectRatio;
   }
   else {
-    canvas.height = container.offsetHeight - 64;
+    canvas.height = container.offsetHeight - canvasMargin;
     canvas.width = canvas.height*canvasAspectRatio;
   }
 
