@@ -8,6 +8,7 @@ var reconnectDelay = 1000;
 
 var canvasElement = document.getElementById("canvas");
 var containerElement = document.getElementById("container");
+var paletteElement = document.getElementById("palette");
 
 // VARIABLES
 
@@ -17,6 +18,7 @@ var canvasPending = true;
 var canvasPixels = [];
 var canvasWidth = 0;
 var canvasHeight = 0;
+var selectedColor = 0;
 
 // HANDLE RESIZES BY RESIZING AND REDRAWING CANVAS
 
@@ -35,8 +37,48 @@ function onResize() {
     canvasElement.width = canvasElement.height*canvasAspectRatio;
   }
 
+  paletteElement.style.width = canvasElement.width + "px";
+
+  if (window.devicePixelRatio != 1.0) {
+    canvasElement.style.width = canvasElement.width + "px";
+    canvasElement.style.height = canvasElement.height + "px";
+    canvasElement.width *= window.devicePixelRatio;
+    canvasElement.height *= window.devicePixelRatio;
+  }
+
   redrawFullCanvas();
+
+  canvasElement.style.visibility = "visible";
+  paletteElement.style.visibility = "visible";
 }
+
+// PALETTE CODE
+
+for (var c = 0; c < colors.length; c++) {
+  var paletteOption = document.createElement("div");
+  paletteOption.style.backgroundColor = colors[c];
+  paletteOption.className = "palette-option";
+  (function(){
+    var savedColor = c;
+    paletteOption.onclick = function() {
+      changeSelectedColor(savedColor);
+    };
+  })();
+  paletteElement.appendChild(paletteOption);
+}
+
+function changeSelectedColor(n) {
+  selectedColor = n;
+  var paletteOptions = paletteElement.childNodes;
+  for (var c = 0; c < paletteOptions.length; c++) {
+    if (c == n)
+      paletteOptions[c].className = "palette-option palette-option-selected";
+    else
+      paletteOptions[c].className = "palette-option";
+  }
+}
+
+changeSelectedColor(0);
 
 // WEBSOCKET CODE (listens for newly placed pixels)
 
@@ -61,8 +103,7 @@ function openNewWebsocket() {
       flushPendingPixels();
 
       onResize();
-      canvas.style.visibility = "visible";
-    })
+    });
   };
 
   // attempt to re-establish the connection if it drops
@@ -123,6 +164,16 @@ function redrawPixel(x, y) {
   }
 
 }
+
+// CANVAS INTERACTION
+
+canvasElement.onclick = function(event) {
+  var x = Math.floor(event.offsetX * canvasWidth / canvasElement.width * window.devicePixelRatio);
+  var y = Math.floor(event.offsetY * canvasHeight / canvasElement.height * window.devicePixelRatio);
+  canvasPixels[x+y*canvasWidth] = selectedColor;
+  redrawPixel(x, y);
+  apiSetPixel(x, y, selectedColor);
+};
 
 // API FUNCTIONS
 
