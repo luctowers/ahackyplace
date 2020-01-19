@@ -7,7 +7,7 @@ module.exports = async function (request, response) {
   const canvasData = await canvas.data();
   
   response.writeHead(200, {"Content-Type": "application/octet-stream"});
-  response.write(memoryHelper.int32ArrayToBuffer([canvasInfo.width, canvasInfo.height]));
+  response.write(memoryHelper.int32ArrayToBuffer([canvasInfo.width, canvasInfo.height, canvasInfo.bitdepth]));
   response.end(canvasData);
 
 };
