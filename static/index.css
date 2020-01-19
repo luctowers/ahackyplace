@@ -13,7 +13,7 @@ body {
   border-bottom: 1px solid#ccc;
 }
 
-#content {
+#container {
   position: absolute;
   left: 0px;
   right: 0px;
@@ -22,11 +22,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 320px;
+  min-height: 320px;
 }
 
 #canvas {
-  width: 512px;
-  height: 512px;
   border: 1px solid black;
   border-style: dotted;
+  visibility: hidden;
 }
