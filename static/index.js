@@ -3,6 +3,7 @@
 var colors = ["#ffffff", "#e4e4e4", "#888888", "#222222", "#ffa7d1", "#e50000", "#e59500", "#a06a42", "#e5d900", "#94e044", "#02be01", "#00d3dd", "#0083c7", "#0000ea", "#cf6ee4", "#820080"];
 var canvasMargin = 64;
 var reconnectDelay = 3000;
+var serverCanvasTTL = 250; // staleness of canvas at the time the server receives the request is at most 250ms 
 
 // DOM ELEMENTS
 
@@ -91,25 +92,23 @@ function openNewWebsocket() {
   // after that get a copy of the full canvas and we will add the new pixels
   // once it arrives
   websocket.onopen = function() {
-    apiFullCanvas(function(error, canvasData) {
-      if (error) {
-        console.log(error);
-        return;
-      }
-      canvasPending = false;error
-      canvasWidth = canvasData.width;
-      canvasHeight = canvasData.height;
-      canvasPixels = canvasData.pixels;
-      flushPendingPixels();
-
-      onResize();
-    });
+    setTimeout(function() {
+      apiFullCanvas(function(error, canvasData) {
+          if (error)
+            websocket.close();
+          canvasPending = false;
+          canvasWidth = canvasData.width;
+          canvasHeight = canvasData.height;
+          canvasPixels = canvasData.pixels;
+          flushPendingPixels();
+          onResize();
+      });
+    }, serverCanvasTTL);
   };
 
   // handle new data from the server
   websocket.onmessage = function(message) {
     var bufferView32 = new Uint32Array(message.data);
-    console.log(bufferView32);
     pendingPixels.push(bufferView32);
     if (!canvasPending)
       flushPendingPixels();
