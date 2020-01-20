@@ -128,12 +128,15 @@ setInterval(function() {
 
 function flushPendingPixels() {canvas
 
-  for (var p = 0; p < pendingPixels.length; p++) {
-    var pixelX = pendingPixels[p][0];
-    var pixelY = pendingPixels[p][1];
-    var pixelValue = pendingPixels[p][2];
-    canvasPixels[pixelX+pixelY*canvasWidth] = pixelValue;
-    redrawPixel(pixelX, pixelY);
+  for (var i = 0; i < pendingPixels.length; i++) {
+    var pixelBatch = pendingPixels[i];
+    for (var p = 0; p < Math.floor(pixelBatch.length / 3); p++) {
+      var pixelX = pixelBatch[3*p+0];
+      var pixelY = pixelBatch[3*p+1];
+      var pixelValue = pixelBatch[3*p+2];
+      canvasPixels[pixelX+pixelY*canvasWidth] = pixelValue;
+      redrawPixel(pixelX, pixelY);
+    }
   }
   pendingPixels = [];
 
@@ -152,10 +155,18 @@ function redrawPixel(x, y) {
   if (typeof canvasElement.getContext == "function") {
     var ctx = canvas.getContext("2d");
 
-    var rectX = Math.floor(x * canvasElement.width / canvasWidth);
-    var rectY = Math.floor(y * canvasElement.height / canvasHeight);
-    var rectWidth = Math.ceil(canvasElement.width / canvasWidth);
-    var rectHeight = Math.ceil(canvasElement.height / canvasHeight);
+    function computeX(x) {
+      return Math.ceil(x * canvasElement.width / canvasWidth);
+    }
+
+    function computeY(y) {
+      return Math.ceil(y * canvasElement.height / canvasHeight);
+    }
+
+    var rectX = computeX(x);
+    var rectY = computeY(y);
+    var rectWidth = computeX(x+1) - rectX;
+    var rectHeight = computeY(y+1) - rectY;
 
     var value = canvasPixels[x+y*canvasWidth];
     ctx.fillStyle = colors[value];
