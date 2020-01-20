@@ -2,7 +2,7 @@
 
 var colors = ["#ffffff", "#e4e4e4", "#888888", "#222222", "#ffa7d1", "#e50000", "#e59500", "#a06a42", "#e5d900", "#94e044", "#02be01", "#00d3dd", "#0083c7", "#0000ea", "#cf6ee4", "#820080"];
 var canvasMargin = 64;
-var reconnectDelay = 1000;
+var reconnectDelay = 3000;
 
 // DOM ELEMENTS
 
@@ -96,7 +96,7 @@ function openNewWebsocket() {
         console.log(error);
         return;
       }
-      canvasPending = false;
+      canvasPending = false;error
       canvasWidth = canvasData.width;
       canvasHeight = canvasData.height;
       canvasPixels = canvasData.pixels;
@@ -106,15 +106,6 @@ function openNewWebsocket() {
     });
   };
 
-  // attempt to re-establish the connection if it drops
-  function attemptRecconect() {
-    pendingPixels = [];
-    canvasPending = true;
-    setTimeout(openNewWebsocket, reconnectDelay);
-  }
-  websocket.onclose = attemptRecconect;
-  websocket.onerror = attemptRecconect;
-
   // handle new data from the server
   websocket.onmessage = function(message) {
     var bufferView32 = new Uint32Array(message.data);
@@ -123,6 +114,14 @@ function openNewWebsocket() {
       flushPendingPixels();
   };
 }
+
+setInterval(function() {
+  if (websocket.readyState != WebSocket.CLOSED && websocket.readyState != WebSocket.CLOSING)
+    return;
+  pendingPixels = [];
+  canvasPending = true;
+  openNewWebsocket();
+}, reconnectDelay);
 
 // CANVAS DRAWING FUNCTIONS
 
