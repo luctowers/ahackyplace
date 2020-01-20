@@ -109,6 +109,7 @@ function openNewWebsocket() {
   // handle new data from the server
   websocket.onmessage = function(message) {
     var bufferView32 = new Uint32Array(message.data);
+    console.log(bufferView32);
     pendingPixels.push(bufferView32);
     if (!canvasPending)
       flushPendingPixels();
