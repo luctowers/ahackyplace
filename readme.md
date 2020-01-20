@@ -13,6 +13,7 @@ A hacky scalable implementation of the [r/place](https://en.wikipedia.org/wiki/P
  - `SET canvas_width 24`
  - `SET canvas_height 24`
  - `SET canvas_bitdepth 4`
+ 
  You can safely substitute the values of `canvas_width` and `canvas_height` to your liking. While the server is capable of handling bitdepths up to 32, at this time the front-end is only capable of handling a `canvas_bitdepth` of 4.
 3. Clone this repository and change directory into it
 4. Run `npm install` and `npm run start`
