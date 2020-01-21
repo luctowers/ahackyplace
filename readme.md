@@ -1,6 +1,8 @@
 # ahackyplace
 A hacky scalable implementation of the [r/place](https://en.wikipedia.org/wiki/Place_%28Reddit%29) concept. Implemented in a weekend, guided by both this [keynote from redislabs](https://www.youtube.com/watch?v=3-Xqghoki70) and this [reddit blogpost](https://redditblog.com/2017/04/13/how-we-built-rplace/).
 
+![screenshot](screenshot.png)
+
 ## Tech Used
 - NodeJS (web app)
 - WebSockets (streaming newly placed pixels to browser)
