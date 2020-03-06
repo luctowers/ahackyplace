@@ -23,7 +23,7 @@ The majority of the above applies for production deployment, except your Redis S
 - `NODE_ENV=production`
 - `PORT=<your http port here>`
 - `REDIS_HOST=<your redis host here>`
-- `PORT=<your redis port here>`
+- `REDIS_PORT=<your redis port here>`
 
 If you are using the included Docker configuration note that, `NODE_ENV` and `PORT` are already set in the Dockerfile.
 
